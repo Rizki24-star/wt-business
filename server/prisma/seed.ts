@@ -1,30 +1,25 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "../src/prsima/prisma";
 
 const products = [
   {
-    id: 1,
     name: "Bluetooth speaker",
     image: "placeholder.jpg",
     stocks: 6,
     price: 126000,
   },
   {
-    id: 2,
     name: "Headphone",
     image: "placeholder.jpg",
     stocks: 10,
-    price: 6000,
+    price: 60000,
   },
   {
-    id: 3,
     name: "Laptop charger",
     image: "placeholder.jpg",
     stocks: 7,
-    price: 72000,
+    price: 220000,
   },
   {
-    id: 4,
     name: "LCD Monitor",
     image: "placeholder.jpg",
     stocks: 1,
@@ -32,4 +27,20 @@ const products = [
   },
 ];
 
-const main = () => {};
+const main = async () => {
+  await prisma.products.deleteMany();
+
+  await prisma.products.createMany({
+    data: products,
+  });
+};
+
+main()
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

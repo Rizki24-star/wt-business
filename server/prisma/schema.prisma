@@ -21,7 +21,7 @@ model Invoices {
   notes            String?
   total_amount     Decimal
   created_at       DateTime         @default(now())
-  updated_At       DateTime         @updatedAt
+  updated_at       DateTime         @updatedAt
   InvoiceProduct   InvoiceProduct[]
 
   @@map("invoices")
@@ -34,7 +34,7 @@ model Products {
   stocks         Int
   price          Decimal
   created_at     DateTime         @default(now())
-  updated_At     DateTime         @updatedAt
+  updated_at     DateTime         @updatedAt
   InvoiceProduct InvoiceProduct[]
 
   @@map("products")
@@ -49,7 +49,7 @@ model InvoiceProduct {
   quantity   Int
   sub_total  Decimal
   created_at DateTime @default(now())
-  updated_At DateTime @updatedAt
+  updated_at DateTime @updatedAt
 
   @@map("invoice_product")
 }

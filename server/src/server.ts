@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
+import router from "./routes";
 
 const app = express();
+
+app.use("/api", router);
 
 const PORT = process.env.PORT || 3300;
 
