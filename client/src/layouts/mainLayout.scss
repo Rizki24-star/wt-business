@@ -1,6 +1,6 @@
 @import "../global.scss";
 .content {
-  height: 100vh;
+  height: calc(100vh - 86px);
   width: 100%;
   padding: 34px;
   background-color: $ligth-color;
