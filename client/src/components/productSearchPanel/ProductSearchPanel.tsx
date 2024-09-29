@@ -1,75 +1,93 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../productCard/ProductCard";
 import Button from "../button/Button";
-import axios from "axios";
 import { Product } from "../../types";
+import { getProducts } from "../../services/productService";
+import { RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {
+  addProduct,
+  deleteProduct,
+  setProducts,
+} from "../../slices/productSlice";
 
-const ProductSearchPanel = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+const ProductSearchPanel = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
+  // const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [selectedProducts, setSelectedProducts] = useState<
-    Map<number, { name: string; quantity: number }>
-  >(new Map());
+  // const [selectedProducts, setSelectedProducts] = useState<
+  //   Map<number, { name: string; quantity: number }>
+  // >(new Map());
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>();
+  const dispatch = useDispatch();
+  const { products, selectedProducts } = useSelector(
+    (state: RootState) => state.products
+  );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3300/api/products")
-      .then(({ data }) => {
-        console.log(data);
-        handleProductFilter(search, data.products);
+    getProducts()
+      .then((data) => {
+        dispatch(setProducts(data.products));
+        setFilteredProducts(data.products);
+        handleProductFilter(search);
       })
-      .catch((e) => {
-        console.log({ error: e });
+      .catch((error) => {
+        console.log(error);
       });
+  }, [search, dispatch, products]);
 
-    setSelectedProducts(selectedProducts);
-  }, [search, selectedProducts]);
-
-  const handleProductFilter = (search: string, products: Product[]) => {
+  const handleProductFilter = (search: string) => {
     if (search.length > 0) {
-      setProducts(
+      // const filteredProducts =
+      setFilteredProducts(
         products.filter((product) =>
           product.name.toLowerCase().includes(search)
         )
       );
+
+      // dispatch(setProducts(filteredProducts));
     } else {
-      setProducts(products);
+      // getProducts().then((data) => {
+      //   dispatch(setProducts(data.products));
+      // });
+      setFilteredProducts(products);
     }
+    // if (search.length > 0) {
+    //   setProducts(
+    //     products.filter((product) =>
+    //       product.name.toLowerCase().includes(search)
+    //     )
+    //   );
+    // } else {
+    //   setProducts(products);
+    // }
   };
 
   const handleSelectProducts = (
     product: { id: number; name: string },
     operation: "add" | "delete"
   ) => {
-    setSelectedProducts((prevSelectedProducts) => {
-      const newSelectedProducts = new Map(prevSelectedProducts);
-
-      if (
-        prevSelectedProducts.get(product.id)?.quantity === 1 &&
-        operation === "delete"
-      ) {
-        newSelectedProducts.delete(product.id);
-      } else {
-        newSelectedProducts.set(product.id, {
-          name: product.name,
-          quantity:
-            (prevSelectedProducts.get(product.id)?.quantity || 0) +
-            (operation === "add" ? 1 : -1),
-        });
-      }
-
-      return newSelectedProducts;
-    });
-
-    console.log(Array.from(selectedProducts));
+    if (operation === "add") {
+      dispatch(addProduct(product));
+    } else {
+      dispatch(deleteProduct(product));
+    }
   };
 
   return (
-    <div className="absolute p-4 bg-white top-0 right-0 w-full md:max-w-[50%] h-screen overflow-x-hidden overflow-y-auto">
+    <div
+      className={`absolute p-4 bg-white top-0 right-0 w-full md:max-w-[50%] h-screen overflow-x-hidden overflow-y-auto ${open ? "" : "hidden"}`}
+    >
       <div className="flex items-center justify-between ">
         <h2 className="text-2xl font-bold">List Products</h2>
-        <button>
+        <button className="cursor-pointer" onClick={onClose}>
           <XMarkIcon width={32} />
         </button>
       </div>
@@ -78,9 +96,7 @@ const ProductSearchPanel = () => {
           type="text"
           className="w-full border p-2 rounded-md focus:border-white"
           placeholder="Search products..."
-          onChange={(e) => {
-            setSearch(e.target.value.toLowerCase());
-          }}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
         {selectedProducts ? (
           <div className="flex flex-col py-2">
@@ -90,9 +106,7 @@ const ProductSearchPanel = () => {
                 ([id, { name, quantity }]) => (
                   <button
                     className="flex items-center gap-1 cursor-pointer  border-4 p-2 px-8 rounded-sm"
-                    onClick={() =>
-                      handleSelectProducts({ id: id, name: name }, "delete")
-                    }
+                    onClick={() => handleSelectProducts({ id, name }, "delete")}
                   >
                     <span>
                       {name} <strong>{quantity}</strong>
@@ -104,7 +118,7 @@ const ProductSearchPanel = () => {
           </div>
         ) : null}
         <div className="flex flex-col gap-2 h-full max-h-screen mt-4 overflow-y-auto px-2">
-          {products.map((product, i) => (
+          {filteredProducts?.map((product, i) => (
             <ProductCard
               key={i}
               onClick={() => handleSelectProducts(product, "add")}
@@ -113,10 +127,10 @@ const ProductSearchPanel = () => {
           ))}
         </div>
       </div>
-      <div className="flex px-4 py-2 bg-white w-full bottom-0 items-center justify-between ">
+      {/* <div className="flex px-4 py-2 bg-white w-full bottom-0 items-center justify-between ">
         <h2 className="font-bold">Save all selected products?</h2>
         <Button text="Save" onClick={() => {}} />
-      </div>
+      </div> */}
     </div>
   );
 };

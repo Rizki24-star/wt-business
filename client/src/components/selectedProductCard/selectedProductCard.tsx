@@ -1,6 +1,26 @@
-import React from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { RootState } from "../../store/store";
 
-const SelectedProductCard = () => {
+const SelectedProductCard = ({
+  id,
+  name,
+  quantity,
+}: {
+  id: number;
+  name: string;
+  quantity: number;
+}) => {
+  const dispatch = useDispatch();
+  const { products } = useSelector((state: RootState) => state.products);
+  const product = products.find((product) => product.id === id);
+  let totalPrice;
+  !product ? (
+    <div>Unknown Product</div>
+  ) : (
+    (totalPrice = product.price * quantity)
+  );
+
   return (
     <div className="flex items-center gap-4 py-2 px-4 bg-white w-max shadow-md rounded-md">
       <img
@@ -9,11 +29,11 @@ const SelectedProductCard = () => {
         alt="product-image"
       />
       <div>
-        <p className="font-bold">Bluotooth Speaker</p>
-        <span className="text-sm">Quantity : 1</span>
+        <p className="font-bold">{name}</p>
+        <span className="text-sm">Quantity : {quantity}</span>
       </div>
       <div className="mb-auto font-bold text-green-500">
-        <h4 className="font-bold text-green-500">IDR 120.000</h4>
+        <h4 className="font-bold text-green-500">IDR {totalPrice}</h4>
       </div>
     </div>
   );

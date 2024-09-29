@@ -3,6 +3,8 @@ import Navbar from "../components/navbar/Navbar";
 import Sidebar from "../components/sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 import "./mainLayout.scss";
+import { Provider } from "react-redux";
+import { store } from "../store/store";
 
 const MainLayout = () => {
   return (
@@ -11,7 +13,9 @@ const MainLayout = () => {
       <div className="flex">
         <Sidebar />
         <div className="content">
-          <Outlet />
+          <Provider store={store}>
+            <Outlet />
+          </Provider>
         </div>
       </div>
     </div>

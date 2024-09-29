@@ -3,6 +3,10 @@ import Button from "../../components/button/Button";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import SelectedProductCard from "../../components/selectedProductCard/selectedProductCard";
 import ProductSearchPanel from "../../components/productSearchPanel/ProductSearchPanel";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const invoiceFormData = [
   {
@@ -26,6 +30,12 @@ const invoiceFormData = [
 ];
 
 const AddInvoicePage = () => {
+  const [isOpen, setisOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { selectedProducts } = useSelector(
+    (state: RootState) => state.products
+  );
+
   return (
     <div className="add-invoice">
       <div className="flex items-center justify-between ">
@@ -50,13 +60,25 @@ const AddInvoicePage = () => {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h4>Select Products</h4>
-              <a className="text-blue-500 font-bold text-lg cursor-pointer">
+              <a
+                className="text-blue-500 font-bold text-lg cursor-pointer"
+                onClick={() => setisOpen(true)}
+              >
                 Add product
               </a>
             </div>
 
             <div className="flex flex-wrap max-h-32 py-2  gap-4 overflow-auto">
-              <SelectedProductCard />
+              {Array.from(selectedProducts.entries()).map(
+                ([id, { name, quantity }]) => (
+                  <SelectedProductCard
+                    key={id}
+                    id={id}
+                    name={name}
+                    quantity={quantity}
+                  />
+                )
+              )}
             </div>
           </div>
           <div className="flex justify-end">
@@ -64,7 +86,7 @@ const AddInvoicePage = () => {
           </div>
         </form>
       </div>
-      <ProductSearchPanel />
+      <ProductSearchPanel open={isOpen} onClose={() => setisOpen(false)} />
     </div>
   );
 };
