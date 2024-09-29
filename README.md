@@ -55,12 +55,9 @@ The client-side is built using React. It includes components for user interface,
 The server-side is built using Node.js and Express. It manages API endpoints and database interactions.
 
 ## API Documentation
-Here is an overview of the API endpoints:
-
-## Endpoint	Method	Description
-/api/example	GET	Fetches example data
-/api/example	POST	Creates new example data
-
+# /api/products	GET	Fetches products data  
+# /api/invoices	GET	Fetches invoices data  
+# /api/invoices/create POST Creates new invoices data 
 
 ## Contact
 For questions or feedback, please reach out to Rizki Okto S at kikingar.567@gmail.com
