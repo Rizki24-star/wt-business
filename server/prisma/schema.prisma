@@ -19,23 +19,23 @@ model Invoices {
   customer_name    String
   salesperson_name String
   notes            String?
-  total_amount     Decimal
+  total_price      Decimal
   created_at       DateTime         @default(now())
   updated_at       DateTime         @updatedAt
-  InvoiceProduct   InvoiceProduct[]
+  invoice_product  InvoiceProduct[]
 
   @@map("invoices")
 }
 
 model Products {
-  id             Int              @id @default(autoincrement())
-  name           String
-  image          String
-  stocks         Int
-  price          Decimal
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  InvoiceProduct InvoiceProduct[]
+  id              Int              @id @default(autoincrement())
+  name            String
+  image           String
+  stocks          Int
+  price           Decimal
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  invoice_product InvoiceProduct[]
 
   @@map("products")
 }

@@ -1,7 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../productCard/ProductCard";
-import Button from "../button/Button";
 import { Product } from "../../types";
 import { getProducts } from "../../services/productService";
 import { RootState } from "../../store/store";
@@ -20,11 +19,7 @@ const ProductSearchPanel = ({
   open: boolean;
   onClose: () => void;
 }) => {
-  // const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState<string>("");
-  // const [selectedProducts, setSelectedProducts] = useState<
-  //   Map<number, { name: string; quantity: number }>
-  // >(new Map());
   const [filteredProducts, setFilteredProducts] = useState<Product[]>();
   const dispatch = useDispatch();
   const { products, selectedProducts } = useSelector(
@@ -35,7 +30,6 @@ const ProductSearchPanel = ({
     getProducts()
       .then((data) => {
         dispatch(setProducts(data.products));
-        setFilteredProducts(data.products);
         handleProductFilter(search);
       })
       .catch((error) => {
@@ -45,29 +39,14 @@ const ProductSearchPanel = ({
 
   const handleProductFilter = (search: string) => {
     if (search.length > 0) {
-      // const filteredProducts =
       setFilteredProducts(
         products.filter((product) =>
           product.name.toLowerCase().includes(search)
         )
       );
-
-      // dispatch(setProducts(filteredProducts));
     } else {
-      // getProducts().then((data) => {
-      //   dispatch(setProducts(data.products));
-      // });
       setFilteredProducts(products);
     }
-    // if (search.length > 0) {
-    //   setProducts(
-    //     products.filter((product) =>
-    //       product.name.toLowerCase().includes(search)
-    //     )
-    //   );
-    // } else {
-    //   setProducts(products);
-    // }
   };
 
   const handleSelectProducts = (
@@ -127,10 +106,6 @@ const ProductSearchPanel = ({
           ))}
         </div>
       </div>
-      {/* <div className="flex px-4 py-2 bg-white w-full bottom-0 items-center justify-between ">
-        <h2 className="font-bold">Save all selected products?</h2>
-        <Button text="Save" onClick={() => {}} />
-      </div> */}
     </div>
   );
 };

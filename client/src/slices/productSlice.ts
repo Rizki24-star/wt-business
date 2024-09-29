@@ -22,6 +22,9 @@ const productSlice = createSlice({
     setProducts: (state, action: PayloadAction<Product[]>) => {
       state.products = action.payload;
     },
+    setSelectedProducts: (state) => {
+      state.selectedProducts = new Map();
+    },
     addProduct: (
       state,
       action: PayloadAction<{ id: number; name: string }>
@@ -54,5 +57,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { setProducts, addProduct, deleteProduct } = productSlice.actions;
+export const { setProducts, setSelectedProducts, addProduct, deleteProduct } =
+  productSlice.actions;
 export default productSlice.reducer;

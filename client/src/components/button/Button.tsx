@@ -5,12 +5,14 @@ const Button: React.FC<{
   text: string;
   Icon?: React.ElementType;
   outlined?: boolean;
-  onClick: () => void;
-}> = ({ text, Icon, onClick, outlined }) => {
+  type?: "button" | "submit";
+  onClick?: () => void;
+}> = ({ text, Icon, onClick, type = "button", outlined }) => {
   return (
     <button
       className={`button flex items-center justify-center ${outlined && "outlined"}`}
       onClick={onClick}
+      type={type}
     >
       {Icon && <Icon width={20} />}
       <span>{text}</span>

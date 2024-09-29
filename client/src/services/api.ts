@@ -18,7 +18,7 @@ export const get = async (endpoint: string, params?: object) => {
 
 export const post = async (endpoint: string, data: object) => {
   try {
-    const response = await api.post(endpoint, { data });
+    const response = await api.post(endpoint, { ...data });
     return response.data;
   } catch (error) {
     throw error;

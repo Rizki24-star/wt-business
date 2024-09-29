@@ -1,11 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  HomeIcon,
-  ArchiveBoxIcon,
-  ReceiptRefundIcon,
-  ReceiptPercentIcon,
-} from "@heroicons/react/24/solid";
+import { HomeIcon, ReceiptPercentIcon } from "@heroicons/react/24/solid";
 import "./sidebar.scss";
 import { link } from "fs";
 
@@ -19,11 +14,6 @@ const links = [
     name: "Invoices",
     link: "/invoices",
     icon: <ReceiptPercentIcon width={20} />,
-  },
-  {
-    name: "Products",
-    link: "/products",
-    icon: <ArchiveBoxIcon width={20} />,
   },
 ];
 

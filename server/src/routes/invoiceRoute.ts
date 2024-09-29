@@ -7,6 +7,6 @@ import {
 const router = Router();
 
 router.get("/", getAllInvoices);
-router.get("/create", createInvoice);
+router.post("/create", createInvoice);
 
 export default router;

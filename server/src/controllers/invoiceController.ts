@@ -19,16 +19,13 @@ export const createInvoice = async (
   res: Response
 ): Promise<void> => {
   try {
-    const data = {
-      customer_name: "Rizki Okto",
-      salesperson_name: "John Doe",
-      date: new Date("2024-09-27"),
-      notes: "",
-      total_amount: new Prisma.Decimal(600000),
-    };
-    const invoice = await invoiceService.createInvoice(data);
-    res.status(200).json({ message: "success", invoice });
+    const invoice = await invoiceService.createInvoice(req.body);
+    // console.log(JSON.stringify(invoice));
+
+    res.status(200).json({ message: "success", data: invoice });
   } catch (error) {
+    console.log(error);
+    console.log(JSON.stringify(req.body));
     res.status(500).json({ message: "Error posting invoice", error });
   }
 };
